@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#C8C8C9"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/buttonGincana"
+        android:layout_width="109dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#E2312C"
+        android:onClick="ativarGincana"
+        android:text="Gincana"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.714"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="412dp"
+        android:layout_height="78dp"
+        android:text="Cotuca Clicker"
+        android:textAlignment="center"
+        android:textColor="#E2312C"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/botaoContador"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.512" />
+
+    <TextView
+        android:id="@+id/textContador"
+        android:layout_width="318dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="373dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="#E2312C"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonDormindoSampaio"
+        android:layout_width="69dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#E2312C"
+        android:onClick="ativarDormindoSampaio"
+        android:text="Zz"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.952"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/botaoContador"
+        android:layout_width="304dp"
+        android:layout_height="313dp"
+        android:clickable="true"
+        android:longClickable="false"
+        android:onClick="btnClicar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.565"
+        app:srcCompat="@drawable/cotuca" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="#E2312C"
+        app:itemTextColor="#FEFEFE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/navigation_loja"
+                android:layout_width="96dp"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:src="@drawable/loja" />
+
+            <ImageView
+                android:id="@+id/navigation_home"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#C7C7C8"
+                android:backgroundTint="#FF0700"
+                android:src="@drawable/home" />
+
+            <ImageView
+                android:id="@+id/navigation_bosses"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@drawable/bosses" />
+
+        </LinearLayout>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
