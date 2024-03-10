@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="Simone"
-                    android:textColor="#000000"
+                    android:textColor="@android:color/black"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="Chico"
-                    android:textColor="#000000"
+                    android:textColor="@android:color/black"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="Sampaio"
-                    android:textColor="#000000"
+                    android:textColor="@android:color/black"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -137,6 +137,7 @@
         android:layout_height="wrap_content"
         android:text="Boss: não escolhido"
         android:textSize="30sp"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -151,6 +152,7 @@
         android:text="0/Vida"
         android:textAlignment="center"
         android:textSize="34sp"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -187,8 +189,8 @@
 
     <ImageView
         android:id="@+id/iconBoss"
-        android:layout_width="316dp"
-        android:layout_height="264dp"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
         android:clickable="true"
         android:onClick="clicarBoss"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -201,18 +203,19 @@
 
     <TextView
         android:id="@+id/textFalaBoss"
-        android:layout_width="207dp"
-        android:layout_height="76dp"
+        android:layout_width="212dp"
+        android:layout_height="127dp"
         android:layout_marginTop="144dp"
         android:layout_marginBottom="22dp"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/NomeBoss"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.921"
+        app:layout_constraintHorizontal_bias="0.919"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.241" />
+        app:layout_constraintVertical_bias="0.725" />
 
     <TextView
         android:id="@+id/tempoBoss"
@@ -221,6 +224,7 @@
         android:layout_marginBottom="12dp"
         android:textAlignment="center"
         android:textSize="20sp"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/iconBoss"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

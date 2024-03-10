@@ -37,8 +37,8 @@
 
     <TextView
         android:id="@+id/textContador"
-        android:layout_width="318dp"
-        android:layout_height="58dp"
+        android:layout_width="316dp"
+        android:layout_height="43dp"
         android:layout_marginBottom="373dp"
         android:text="0"
         android:textAlignment="center"
@@ -47,9 +47,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.438" />
 
     <Button
         android:id="@+id/buttonDormindoSampaio"
@@ -120,6 +121,18 @@
         </LinearLayout>
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <TextView
+        android:id="@+id/danoPorSegundo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Dano por segundo:"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textContador" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

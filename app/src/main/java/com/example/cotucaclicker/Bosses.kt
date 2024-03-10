@@ -1,7 +1,11 @@
 package com.example.cotucaclicker
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.animation.AnimatorSet
 import android.content.Intent
+import android.graphics.Path
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -9,7 +13,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.animation.AnimatorSet
 
 class Bosses : MainActivity() {
     private lateinit var vidaBossTextView: TextView
@@ -22,11 +25,13 @@ class Bosses : MainActivity() {
     private lateinit var tempoBoss: TextView
 
     private val handler = Handler()
-    private var contadorTempo = 30
+    private var contadorTempo = 30 + (quantasAulasExtras/2).toInt()
     private var fase2Ativa = false
     private var originalHeight = 0
-    private lateinit var bossAnimationX: ObjectAnimator
-    private lateinit var bossAnimationY: ObjectAnimator
+    private lateinit var bossAnimation: ObjectAnimator
+    private var isBossFading = false
+    private var posicaoAtualY = 0f
+    private var posicaoAtualX = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +73,9 @@ class Bosses : MainActivity() {
 
             scaleDown.start()
             scaleUp.start()
-            clicarBoss(it)
+            if(!isBossFading){
+                clicarBoss(it)
+            }
         }
 
         simoneLayout.setOnClickListener {
@@ -102,11 +109,13 @@ class Bosses : MainActivity() {
         textFalaBoss.text = when (nome) {
             "Simone" -> "Para de clicar"
             "Chico" -> "*Chico começa a voar*"
-            else -> "Dormindo na aula do Sampaio?"
+            "Sampaio" -> "Dormindo na aula do Sampaio?"
+            else -> "Boss inválido"
         }
         iconBossImageView.setImageResource(resources.getIdentifier(nome.toLowerCase(), "drawable", packageName))
         fase2Ativa = false
-        contadorTempo = 30
+        contadorTempo = 30 + (quantasAulasExtras/2).toInt()
+        tempoBoss.text = contadorTempo.toString()
     }
 
     private val atualizarContadorBoss = object : Runnable {
@@ -131,7 +140,7 @@ class Bosses : MainActivity() {
                         tempoBoss.text = contadorTempo.toString()
                     } else {
                         vidaBossTextView.text = "${vida[1]}/${vida[1]}"
-                        contadorTempo = 30
+                        contadorTempo = 30 + (quantasAulasExtras/2).toInt()
                     }
                 }
             }
@@ -167,28 +176,55 @@ class Bosses : MainActivity() {
         }
     }
 
-    private fun startBossAnimation(duracao: Long, distanciaX: Float, distanciaY: Float) {
-        bossAnimationX = ObjectAnimator.ofFloat(iconBossImageView, "translationX", -distanciaX, distanciaX).apply {
-            duration = duracao
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-            start()
+    private fun startBossAnimation(duracao: Long, raio: Float, originalHeight : Float) {
+        posicaoAtualX = originalHeight
+        posicaoAtualY = iconBossImageView.y + originalHeight
+
+        val path = Path().apply {
+            moveTo(posicaoAtualX + raio, posicaoAtualY)
+            addCircle(posicaoAtualX, posicaoAtualY, raio, Path.Direction.CW)
         }
 
-        bossAnimationY = ObjectAnimator.ofFloat(iconBossImageView, "translationY", -distanciaY, distanciaY).apply {
+        bossAnimation = ObjectAnimator.ofFloat(iconBossImageView, View.X, View.Y, path).apply {
             duration = duracao
             repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-            start()
+            repeatMode = ObjectAnimator.RESTART
         }
+
+        bossAnimation.start()
     }
 
     private fun stopBossAnimation() {
-        if (::bossAnimationX.isInitialized && ::bossAnimationY.isInitialized &&
-            bossAnimationX.isRunning && bossAnimationY.isRunning) {
-            bossAnimationX.cancel()
-            bossAnimationY.cancel()
+        if (::bossAnimation.isInitialized && bossAnimation.isRunning) {
+            bossAnimation.cancel()
+
+            iconBossImageView.x = posicaoAtualX
+            iconBossImageView.y = posicaoAtualY
         }
+    }
+
+    private fun startDeathAnimation() {
+        isBossFading = true
+        val fadeOut = ObjectAnimator.ofFloat(iconBossImageView, View.ALPHA, 1f, 0f).apply {
+            duration = 500
+        }
+
+        fadeOut.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                resetBoss(nomeBossTextView.text.toString().replace("Boss: ", ""), vidaBossTextView.text.split('/')[1].toInt())
+                val fadeIn = ObjectAnimator.ofFloat(iconBossImageView, View.ALPHA, 0f, 1f).apply {
+                    duration = 500
+                }
+                fadeIn.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        isBossFading = false
+                    }
+                })
+                fadeIn.start()
+            }
+        })
+
+        fadeOut.start()
     }
 
     fun clicarBoss(view: View) {
@@ -213,14 +249,14 @@ class Bosses : MainActivity() {
                 originalHeight = iconBossImageView.height
                 if (nomeBossTextView.text == "Boss: Chico" || nomeBossTextView.text == "Boss: Sampaio") {
                     if (nomeBossTextView.text == "Boss: Chico") {
+                        startBossAnimation(200 + (quantosEsgotos*10).toLong(), 200.0f, (originalHeight * 0.5).toFloat())
                         layoutParams.width = (originalHeight * 0.4).toInt()
                         layoutParams.height = (originalHeight * 0.4).toInt()
-                        startBossAnimation(200, 100.0f, 100.0f)
                     }
                     if (nomeBossTextView.text == "Boss: Sampaio") {
+                        startBossAnimation(100 + (quantosEsgotos*10).toLong(), 300.0f, (originalHeight * 0.6).toFloat())
                         layoutParams.width = (originalHeight * 0.2).toInt()
                         layoutParams.height = (originalHeight * 0.2).toInt()
-                        startBossAnimation(100, 120.0f, 50.0f)
                     }
                     iconBossImageView.layoutParams = layoutParams
                     fase2Ativa = true
@@ -228,33 +264,63 @@ class Bosses : MainActivity() {
             }
 
             if (vida[0].toInt() - ((quantosSucosBandecos + 1) * multiplicadorAtivo).toInt() <= 0) {
+                var multiplicadorPassivoAtual = multiplicadorPassivo
+                var multiplicadorAtivoAtual = multiplicadorAtivo
+                if(cooldownGincana >= 40){
+                    multiplicadorAtivoAtual -= 2
+                    multiplicadorPassivoAtual -= 2
+                }
+                if(cooldownSampaio >= 10){
+                    multiplicadorPassivoAtual -= 2
+                }
+
                 when (nomeBossTextView.text) {
                     "Boss: Simone" -> {
-                        textFalaBoss.text = "Finalmente silêncio... | +0.05 multiplicador passivo"
-                        multiplicadorAtivo += 0.05f
+                        if(multiplicadorAtivoAtual < 5){
+                            textFalaBoss.text = "+0.05 multiplicador ativo"
+                            multiplicadorAtivo += 0.05f
+                        } else{
+                            textFalaBoss.text = "Você já pegou todo multiplicador ativo que podia de mim"
+                        }
                     }
                     "Boss: Chico" -> {
-                        textFalaBoss.text = "Você usou as técnicas de programação | +0.05 multiplicador passivo"
-                        multiplicadorPassivo += 0.1f
-                        var layoutParams = iconBossImageView.layoutParams
-                        layoutParams.width = originalHeight
-                        layoutParams.height = originalHeight
-                        iconBossImageView.layoutParams = layoutParams
+                        if(multiplicadorPassivoAtual < 10){
+                            textFalaBoss.text = "+0.1 multiplicador passivo"
+                            multiplicadorPassivo += 0.1f
+                        } else{
+                            textFalaBoss.text = "Você já pegou todo multiplicador passivo que podia de mim"
+                        }
                     }
                     "Boss: Sampaio" -> {
-                        textFalaBoss.text = "Você conseguiu guardar a tempo... | +0.1 multiplicador ativo e passivo"
-                        multiplicadorAtivo += 0.1f
-                        multiplicadorPassivo += 0.1f
-                        var layoutParams = iconBossImageView.layoutParams
-                        layoutParams.width = originalHeight
-                        layoutParams.height = originalHeight
-                        iconBossImageView.layoutParams = layoutParams
+                        if(multiplicadorPassivoAtual < 15 && multiplicadorAtivoAtual < 15){
+                            multiplicadorPassivo += 0.1f
+                            multiplicadorAtivo += 0.1f
+                            textFalaBoss.text = "+0.1 multiplicador passivo e ativo"
+                        } else{
+                            if(multiplicadorPassivoAtual < 15){
+                                multiplicadorPassivo += 0.1f
+                                textFalaBoss.text = "+0.1 multiplicador passivo"
+                            }
+                            else {
+                                if(multiplicadorAtivoAtual < 15){
+                                    multiplicadorAtivo += 0.1f
+                                    textFalaBoss.text = "+0.1 multiplicador ativo"
+                                }
+                                else{
+                                    textFalaBoss.text = "Você já pegou todo multiplicador passivo e ativo que podia de mim"
+                                }
+                            }
+                        }
+                        iconBossImageView.setImageResource(R.drawable.sampaio)
                     }
                 }
+                val layoutParams = iconBossImageView.layoutParams
+                layoutParams.width = originalHeight
+                layoutParams.height = originalHeight
+                iconBossImageView.layoutParams = layoutParams
+
                 stopBossAnimation()
-                fase2Ativa = false
-                contadorTempo = 30;
-                vidaBossTextView.text = "${vida[1].toInt()}/${vida[1].toInt()}"
+                startDeathAnimation()
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.example.cotucaclicker
 
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
@@ -12,20 +11,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import android.animation.AnimatorSet
 
 
 private val handler = Handler()
 
 open class MainActivity : AppCompatActivity() {
 
-    var contador = 0
+    var contador: Long = 0
     var cooldownSampaio = 0
     var cooldownGincana = 0
     var quantosSucosBandecos = 0
     var quantasHorasSono = 0
+    var quantosEsgotos = 0
+    var quantasAulasExtras = 0
     var multiplicadorPassivo = 1.0f
     var multiplicadorAtivo = 1.0f
     private lateinit var botaoContador: ImageView
+    private lateinit var danoPorSegundo : TextView
     lateinit var textContador: TextView
 
     private lateinit var buttonDormindoSampaio: Button
@@ -38,11 +41,14 @@ open class MainActivity : AppCompatActivity() {
 
         textContador = findViewById(R.id.textContador)
         botaoContador = findViewById(R.id.botaoContador)
+        danoPorSegundo = findViewById(R.id.danoPorSegundo)
 
         buttonDormindoSampaio = findViewById(R.id.buttonDormindoSampaio)
         buttonGincana = findViewById(R.id.buttonGincana)
 
         restaurarEstado()
+
+        danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
 
         handler.post(atualizarContadorRunnable)
         handler.post(atualizarCooldownSampaio)
@@ -81,7 +87,7 @@ open class MainActivity : AppCompatActivity() {
     }
 
     fun btnClicar(view: View){
-        contador += ((quantosSucosBandecos+1) * multiplicadorAtivo).toInt()
+        contador += ((quantosSucosBandecos+1) * multiplicadorAtivo).toLong()
         textContador.text = contador.toString()
     }
 
@@ -92,6 +98,7 @@ open class MainActivity : AppCompatActivity() {
             cooldownSampaio = 20
             buttonDormindoSampaio.text = cooldownSampaio.toString()
             buttonDormindoSampaio.setBackgroundColor(0xFFFF0000.toInt())
+            danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
         } else {
             Toast.makeText(this, "A habilidade ainda está em cooldown", Toast.LENGTH_SHORT).show()
         }
@@ -105,6 +112,7 @@ open class MainActivity : AppCompatActivity() {
             cooldownGincana = 60
             buttonGincana.text = cooldownGincana.toString()
             buttonGincana.setBackgroundColor(0xFFFF0000.toInt())
+            danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
         } else {
             Toast.makeText(this, "A habilidade ainda está em cooldown", Toast.LENGTH_SHORT).show()
         }
@@ -118,6 +126,7 @@ open class MainActivity : AppCompatActivity() {
                 if(cooldownSampaio == 10){
                     multiplicadorPassivo -= 2.0f
                     buttonDormindoSampaio.setBackgroundColor(0xE2312C.toInt())
+                    danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
                 }
             } else {
                 buttonDormindoSampaio.text = "Zz"
@@ -135,6 +144,7 @@ open class MainActivity : AppCompatActivity() {
                     multiplicadorPassivo -= 2.0f
                     multiplicadorAtivo -= 2.0f
                     buttonGincana.setBackgroundColor(0xE2312C.toInt())
+                    danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
                 }
             } else {
                 buttonGincana.text = "Gincana"
@@ -172,11 +182,13 @@ open class MainActivity : AppCompatActivity() {
     private fun salvarEstado() {
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putInt("contador", contador)
+        editor.putLong("contador", contador)
         editor.putInt("cooldownSampaio", cooldownSampaio)
         editor.putInt("cooldownGincana", cooldownGincana)
         editor.putInt("quantosSucosBandecos", quantosSucosBandecos)
         editor.putInt("quantasHorasSono", quantasHorasSono)
+        editor.putInt("quantosEsgotos", quantosEsgotos)
+        editor.putInt("quantasAulasExtras", quantasAulasExtras)
         editor.putFloat("multiplicadorPassivo", multiplicadorPassivo)
         editor.putFloat("multiplicadorAtivo", multiplicadorAtivo)
         editor.apply()
@@ -184,11 +196,13 @@ open class MainActivity : AppCompatActivity() {
 
     private fun restaurarEstado() {
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        contador = sharedPreferences.getInt("contador", 0)
+        contador = sharedPreferences.getLong("contador", 0)
         cooldownSampaio = sharedPreferences.getInt("cooldownSampaio", 0)
         cooldownGincana = sharedPreferences.getInt("cooldownGincana", 0)
         quantosSucosBandecos = sharedPreferences.getInt("quantosSucosBandecos", 0)
         quantasHorasSono = sharedPreferences.getInt("quantasHorasSono", 0)
+        quantosEsgotos = sharedPreferences.getInt("quantosEsgotos", 0)
+        quantasAulasExtras = sharedPreferences.getInt("quantasAulasExtras", 0)
         multiplicadorPassivo = sharedPreferences.getFloat("multiplicadorPassivo", 1.0f)
         multiplicadorAtivo = sharedPreferences.getFloat("multiplicadorAtivo", 1.0f)
     }
