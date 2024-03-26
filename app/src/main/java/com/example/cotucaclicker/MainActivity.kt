@@ -1,17 +1,23 @@
 package com.example.cotucaclicker
 
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
+import android.os.StrictMode
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import android.animation.AnimatorSet
+
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.SQLException
 
 
 private val handler = Handler()
@@ -34,10 +40,33 @@ open class MainActivity : AppCompatActivity() {
     private lateinit var buttonDormindoSampaio: Button
     private lateinit var buttonGincana: Button
 
+    var DATABASE_URL = BuildConfig.DATABASE_URL
+    lateinit var conexao : Connection;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        class NetworkTask : AsyncTask<Void, Void, Void>() {
+
+            override fun doInBackground(vararg params: Void?): Void? {
+                println("amonia")
+                try {
+                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
+                    conexao = DriverManager.getConnection(DATABASE_URL)
+
+                    if (conexao != null) {
+                        println("Conexão bem-sucedida!")
+                    } else {
+                        println("Falha na conexão!")
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                return null
+            }
+        }
+        NetworkTask().execute()
+
 
         textContador = findViewById(R.id.textContador)
         botaoContador = findViewById(R.id.botaoContador)
@@ -206,6 +235,5 @@ open class MainActivity : AppCompatActivity() {
         multiplicadorPassivo = sharedPreferences.getFloat("multiplicadorPassivo", 1.0f)
         multiplicadorAtivo = sharedPreferences.getFloat("multiplicadorAtivo", 1.0f)
     }
-
 
 }

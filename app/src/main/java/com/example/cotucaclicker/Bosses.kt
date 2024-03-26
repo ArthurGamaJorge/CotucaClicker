@@ -47,6 +47,9 @@ class Bosses : MainActivity() {
         tempoBoss = findViewById(R.id.tempoBoss)
 
         val simoneLayout: LinearLayout = findViewById(R.id.Simone)
+        val AnaPaulaLayout: LinearLayout = findViewById(R.id.AnaPaula)
+        val JodirLayout: LinearLayout = findViewById(R.id.Jodir)
+        val CelioLayout: LinearLayout = findViewById(R.id.Celio)
         val chicoLayout: LinearLayout = findViewById(R.id.Chico)
         val sampaioLayout: LinearLayout = findViewById(R.id.Sampaio)
 
@@ -79,15 +82,27 @@ class Bosses : MainActivity() {
         }
 
         simoneLayout.setOnClickListener {
-            resetBoss("Simone", 2500)
+            resetBoss("Simone", 5000)
+        }
+
+        AnaPaulaLayout.setOnClickListener {
+            resetBoss("Ana Paula", 12000)
+        }
+
+        JodirLayout.setOnClickListener {
+            resetBoss("Jodir", 40000)
+        }
+
+        CelioLayout.setOnClickListener {
+            resetBoss("Celio", 80000)
         }
 
         chicoLayout.setOnClickListener {
-            resetBoss("Chico", 5000)
+            resetBoss("Chico", 150000)
         }
 
         sampaioLayout.setOnClickListener {
-            resetBoss("Sampaio", 13000)
+            resetBoss("Sampaio", 500000)
         }
 
         buttonGincana.setOnClickListener {
@@ -108,11 +123,14 @@ class Bosses : MainActivity() {
         vidaBossTextView.text = "$vidaTotal/$vidaTotal"
         textFalaBoss.text = when (nome) {
             "Simone" -> "Para de clicar"
+            "Ana Paula" -> "Isso da cancer ein"
+            "Jodir" -> "Vamos fazer um mergulho"
+            "Celio" -> "Eu sou a verdade absoluta"
             "Chico" -> "*Chico começa a voar*"
             "Sampaio" -> "Dormindo na aula do Sampaio?"
             else -> "Boss inválido"
         }
-        iconBossImageView.setImageResource(resources.getIdentifier(nome.toLowerCase(), "drawable", packageName))
+        iconBossImageView.setImageResource(resources.getIdentifier(nome.replace(" ", "").toLowerCase(), "drawable", packageName))
         fase2Ativa = false
         contadorTempo = 30 + (quantasAulasExtras/2).toInt()
         tempoBoss.text = contadorTempo.toString()
@@ -236,6 +254,9 @@ class Bosses : MainActivity() {
             if (vida[0].toInt() - ((quantosSucosBandecos + 1) * multiplicadorAtivo).toInt() < vida[1].toInt() / 2) {
                 when (nomeBossTextView.text) {
                     "Boss: Simone" -> textFalaBoss.text = "*Começa a bater na mesa*"
+                    "Boss: Ana Paula" -> textFalaBoss.text = "ô inferno (falo inferno por causa de Jesus)"
+                    "Boss: Jodir" -> textFalaBoss.text = "*Plopt*"
+                    "Boss: Celio" -> textFalaBoss.text = "*Alarme começa a tocar*"
                     "Boss: Chico" -> textFalaBoss.text = "EU DISSE PARA LER A APOSTILA"
                     "Boss: Sampaio" -> {
                         textFalaBoss.text = "Celulares na aula do Sampaio?"
@@ -266,6 +287,9 @@ class Bosses : MainActivity() {
             if (vida[0].toInt() - ((quantosSucosBandecos + 1) * multiplicadorAtivo).toInt() <= 0) {
                 var multiplicadorPassivoAtual = multiplicadorPassivo
                 var multiplicadorAtivoAtual = multiplicadorAtivo
+                var multiplicadorAtivoTemp = 0.0f
+                var multiplicadorPassivoTemp = 0.0f
+
                 if(cooldownGincana >= 40){
                     multiplicadorAtivoAtual -= 2
                     multiplicadorPassivoAtual -= 2
@@ -277,37 +301,40 @@ class Bosses : MainActivity() {
                 when (nomeBossTextView.text) {
                     "Boss: Simone" -> {
                         if(multiplicadorAtivoAtual < 5){
-                            textFalaBoss.text = "+0.05 multiplicador ativo"
-                            multiplicadorAtivo += 0.05f
-                        } else{
-                            textFalaBoss.text = "Você já pegou todo multiplicador ativo que podia de mim"
+                            multiplicadorAtivoTemp += 0.05f
+                        }
+                    }
+                    "Boss: Ana Paula" -> {
+                        if(multiplicadorPassivoAtual < 10){
+                            multiplicadorPassivoTemp += 0.05f
+                        }
+                    }
+                    "Boss: Jodir" -> {
+                        if(multiplicadorAtivoAtual < 15){
+                            multiplicadorAtivoTemp += 0.05f
+                        }
+                    }
+                    "Boss: Celio" -> {
+                        if(multiplicadorPassivoAtual < 20){
+                            multiplicadorPassivoTemp += 0.1f
                         }
                     }
                     "Boss: Chico" -> {
-                        if(multiplicadorPassivoAtual < 10){
-                            textFalaBoss.text = "+0.1 multiplicador passivo"
-                            multiplicadorPassivo += 0.1f
-                        } else{
-                            textFalaBoss.text = "Você já pegou todo multiplicador passivo que podia de mim"
+                        if(multiplicadorAtivoAtual < 25){
+                            multiplicadorAtivoTemp += 0.1f
                         }
                     }
                     "Boss: Sampaio" -> {
-                        if(multiplicadorPassivoAtual < 15 && multiplicadorAtivoAtual < 15){
-                            multiplicadorPassivo += 0.1f
-                            multiplicadorAtivo += 0.1f
-                            textFalaBoss.text = "+0.1 multiplicador passivo e ativo"
+                        if(multiplicadorPassivoAtual < 30 && multiplicadorAtivoAtual < 30){
+                            multiplicadorPassivoTemp += 0.1f
+                            multiplicadorAtivoTemp += 0.1f
                         } else{
-                            if(multiplicadorPassivoAtual < 15){
-                                multiplicadorPassivo += 0.1f
-                                textFalaBoss.text = "+0.1 multiplicador passivo"
+                            if(multiplicadorPassivoAtual < 30){
+                                multiplicadorPassivoTemp += 0.1f
                             }
                             else {
-                                if(multiplicadorAtivoAtual < 15){
-                                    multiplicadorAtivo += 0.1f
-                                    textFalaBoss.text = "+0.1 multiplicador ativo"
-                                }
-                                else{
-                                    textFalaBoss.text = "Você já pegou todo multiplicador passivo e ativo que podia de mim"
+                                if(multiplicadorAtivoAtual < 30){
+                                    multiplicadorAtivoTemp += 0.1f
                                 }
                             }
                         }
@@ -318,9 +345,25 @@ class Bosses : MainActivity() {
                 layoutParams.width = originalHeight
                 layoutParams.height = originalHeight
                 iconBossImageView.layoutParams = layoutParams
-
                 stopBossAnimation()
                 startDeathAnimation()
+
+                multiplicadorAtivo += multiplicadorAtivoTemp
+                multiplicadorPassivo += multiplicadorPassivoTemp
+
+                if(multiplicadorAtivoTemp > 0 && multiplicadorPassivoTemp > 0){
+                    textFalaBoss.text = "+ ${multiplicadorPassivoTemp} multiplicador passivo e ativo"
+                    return
+                }
+                if(multiplicadorPassivoTemp > 0){
+                    textFalaBoss.text = "+ ${multiplicadorPassivoTemp} multiplicador passivo"
+                    return
+                }
+                if(multiplicadorAtivoTemp > 0){
+                    textFalaBoss.text = "+ ${multiplicadorAtivoTemp} multiplicador ativo"
+                    return
+                }
+                textFalaBoss.text = "Não há mais multiplicador para ganhar de mim"
             }
         }
     }

@@ -13,7 +13,7 @@
         android:layout_height="101dp"
         android:backgroundTint="#E2312C"
         android:onClick="comprarSucoBandeco"
-        android:text="50 - suco do bandeco"
+        android:text="@string/strBandeco"
         android:textColorLink="#FF0000"
         android:textSize="24sp"
         app:cornerRadius="0dp"
@@ -26,9 +26,10 @@
 
     <TextView
         android:id="@+id/TextQuantosSucos"
+        android:textColor="@android:color/black"
         android:layout_width="102dp"
         android:layout_height="91dp"
-        android:text="0"
+        android:text="@string/strBandecoCount"
         android:textAlignment="center"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +43,7 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Aumenta nota ganha por clique"
+        android:text="@string/strBandecoDesc"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -58,7 +59,7 @@
         android:layout_height="101dp"
         android:backgroundTint="#E2312C"
         android:onClick="comprarAulaExtra"
-        android:text="500 - aula extra"
+        android:text="@string/strAula"
         android:textSize="24sp"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -70,9 +71,10 @@
 
     <TextView
         android:id="@+id/TextQuantasAulasExtras"
+        android:textColor="@android:color/black"
         android:layout_width="102dp"
         android:layout_height="101dp"
-        android:text="0"
+        android:text="@string/strAulaCount"
         android:textAlignment="center"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -86,7 +88,7 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Aumenta tempo bosses"
+        android:text="@string/strAulaDesc"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -102,7 +104,7 @@
         android:layout_height="101dp"
         android:backgroundTint="#E2312C"
         android:onClick="comprarEsgoto"
-        android:text="200 - esgoto"
+        android:text="@string/strEsgoto"
         android:textSize="24sp"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -118,7 +120,7 @@
         android:layout_height="97dp"
         android:backgroundTint="#E2312C"
         android:onClick="comprarHorasSono"
-        android:text="150 - horas de sono"
+        android:text="@string/strSono"
         android:textSize="24sp"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -132,7 +134,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Diminui velocidade dos bosses"
+        android:text="@string/strEsgotoDesc"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -144,9 +146,10 @@
 
     <TextView
         android:id="@+id/TextQuantasHorasSono"
+        android:textColor="@android:color/black"
         android:layout_width="102dp"
         android:layout_height="91dp"
-        android:text="0"
+        android:text="@string/strSonoCount"
         android:textAlignment="center"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -158,9 +161,10 @@
 
     <TextView
         android:id="@+id/TextQuantosEsgotos"
+        android:textColor="@android:color/black"
         android:layout_width="102dp"
         android:layout_height="91dp"
-        android:text="0"
+        android:text="@string/strEsgotoCount"
         android:textAlignment="center"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -174,7 +178,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Aumenta nota ganha por segundo"
+        android:text="@string/strSonoDesc"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -203,9 +207,10 @@
                 android:id="@+id/navigation_loja"
                 android:layout_width="96dp"
                 android:layout_height="match_parent"
-                android:padding="10dp"
                 android:background="#C7C7C8"
                 android:backgroundTint="#FF0700"
+                android:contentDescription="@string/strDescIconSeçãoLoja"
+                android:padding="10dp"
                 android:src="@drawable/loja" />
 
             <ImageView
@@ -213,12 +218,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/strDescIconSeçãoHome"
                 android:src="@drawable/home" />
 
             <ImageView
                 android:id="@+id/navigation_bosses"
                 android:layout_width="96dp"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/strDescIconSeçãoBoss"
                 android:padding="10dp"
                 android:src="@drawable/bosses" />
 

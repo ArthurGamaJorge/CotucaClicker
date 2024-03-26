@@ -1,3 +1,46 @@
 <resources>
     <string name="app_name">CotucaClicker</string>
+    <string name="strTitle">Cotuca Clicker</string>
+    <string name="strGincana">Gincana</string>
+    <string name="strZz">Zz</string>
+    <string name="strDPS">Dano por segundo</string>
+    <string name="strContador">0</string>
+
+    <string name="strBandeco">Suco do bandeco</string>
+    <string name="strBandecoDesc">Aumenta nota ganha por clique</string>
+    <string name="strBandecoCount">0</string>
+    <string name="strSono">Horas de sono</string>
+    <string name="strSonoDesc">Aumenta nota ganha por segundo</string>
+    <string name="strSonoCount">0</string>
+    <string name="strEsgoto">esgoto</string>
+    <string name="strEsgotoDesc">Diminui velocidade dos bosses</string>
+    <string name="strEsgotoCount">0</string>
+    <string name="strAula">aula extra</string>
+    <string name="strAulaDesc">Aumenta tempo bosses</string>
+    <string name="strAulaCount">0</string>
+
+    <string name="strBossNome">Boss: não escolhido</string>
+    <string name="strBossVida">0/Vida</string>
+    <string name="strBossSimone">Simone</string>
+    <string name="strBossAnaPaula">Ana Paula</string>
+    <string name="strBossJodir">Jodir</string>
+    <string name="strBossCelio">Célio</string>
+    <string name="strBossChico">Chico</string>
+    <string name="strSampaio">Sampaio</string>
+    <string name="strTempoBoss">30</string>
+    <string name="strFalaBoss">Fala do boss</string>
+
+    <string name="strDescIconSeçãoHome">Icone seção home</string>
+    <string name="strDescIconSeçãoLoja">Icone seção loja</string>
+    <string name="strDescIconSeçãoBoss">Icone seção bosses</string>
+    <string name="strDescIconCotuca">Icone do cotuca</string>
+
+    <string name="strDescIconBoss">Icone do boss</string>
+    <string name="strDescIconBossSimone">Icone do boss Simone</string>
+    <string name="strDescIconBossAnaPaula">Icone do boss Ana Paula</string>
+    <string name="strDescIconBossJodir">Icone do boss Jodir</string>
+    <string name="strDescIconBossCelio">Icone do boss Célio</string>
+    <string name="strDescIconBossChico">Icone do boss Chico</string>
+    <string name="strDescIconSampaio">Icone do boss Sampaio</string>
+
 </resources>

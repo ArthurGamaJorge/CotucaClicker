@@ -26,6 +26,7 @@
                 android:id="@+id/navigation_loja"
                 android:layout_width="96dp"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/strDescIconSeçãoLoja"
                 android:padding="10dp"
                 android:src="@drawable/loja" />
 
@@ -34,15 +35,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/strDescIconSeçãoHome"
                 android:src="@drawable/home" />
 
             <ImageView
                 android:id="@+id/navigation_bosses"
                 android:layout_width="96dp"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
                 android:background="#C7C7C8"
                 android:backgroundTint="#FF0700"
+                android:contentDescription="@string/strDescIconSeçãoBoss"
+                android:padding="10dp"
                 android:src="@drawable/bosses" />
 
         </LinearLayout>
@@ -51,8 +54,8 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="162dp"
-        android:layout_height="667dp"
+        android:layout_width="152dp"
+        android:layout_height="219dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -75,13 +78,80 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:contentDescription="@string/strDescIconBossSimone"
                     android:src="@drawable/simone" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Simone"
+                    android:text="@string/strBossSimone"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/AnaPaula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/strDescIconBossAnaPaula"
+                    android:src="@drawable/anapaula" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/strBossAnaPaula"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Jodir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/strDescIconBossJodir"
+                    android:src="@drawable/jodir" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/strBossJodir"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Celio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/strDescIconBossCelio"
+                    android:src="@drawable/celio" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/strBossCelio"
                     android:textColor="@android:color/black"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -96,13 +166,14 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:contentDescription="@string/strDescIconBossChico"
                     android:src="@drawable/chico" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Chico"
+                    android:text="@string/strBossChico"
                     android:textColor="@android:color/black"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -117,13 +188,14 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:contentDescription="@string/strDescIconSampaio"
                     android:src="@drawable/sampaio" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Sampaio"
+                    android:text="@string/strSampaio"
                     android:textColor="@android:color/black"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -135,9 +207,9 @@
         android:id="@+id/NomeBoss"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Boss: não escolhido"
-        android:textSize="30sp"
+        android:text="@string/strBossNome"
         android:textColor="@android:color/black"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -149,10 +221,10 @@
         android:id="@+id/VidaBoss"
         android:layout_width="246dp"
         android:layout_height="64dp"
-        android:text="0/Vida"
+        android:text="@string/strBossVida"
         android:textAlignment="center"
-        android:textSize="34sp"
         android:textColor="@android:color/black"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -166,7 +238,7 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="#E2312C"
         android:onClick="ativarGincana"
-        android:text="Gincana"
+        android:text="@string/strGincana"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.714"
@@ -180,7 +252,7 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="#E2312C"
         android:onClick="ativarDormindoSampaio"
-        android:text="Zz"
+        android:text="@string/strZz"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.952"
@@ -191,7 +263,7 @@
         android:id="@+id/iconBoss"
         android:layout_width="320dp"
         android:layout_height="320dp"
-        android:clickable="true"
+        android:contentDescription="@string/strDescIconBoss"
         android:onClick="clicarBoss"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -207,6 +279,7 @@
         android:layout_height="127dp"
         android:layout_marginTop="144dp"
         android:layout_marginBottom="22dp"
+        android:text="@string/strFalaBoss"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="20sp"
@@ -221,13 +294,15 @@
         android:id="@+id/tempoBoss"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:text="@string/strTempoBoss"
         android:textAlignment="center"
-        android:textSize="20sp"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/iconBoss"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/VidaBoss" />
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/iconBoss"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="@+id/iconBoss"
+        app:layout_constraintTop_toTopOf="@+id/iconBoss"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
