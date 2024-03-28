@@ -51,6 +51,11 @@ class Loja : MainActivity() {
             val intent = Intent(this, Bosses::class.java)
             startActivity(intent)
         }
+
+        findViewById<ImageView>(R.id.navigation_online).setOnClickListener {
+            val intent = Intent(this, Rank::class.java)
+            startActivity(intent)
+        }
     }
 
     fun comprarSucoBandeco(view: android.view.View?) {

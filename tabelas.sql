@@ -5,3 +5,5 @@ CREATE TABLE CotucaClicker.Usuarios(
 	nome VARCHAR(50) NOT NULL,
 	pontos BIGINT NOT NULL
 )
+
+insert into CotucaClicker.Usuarios values('Dev', -10000)

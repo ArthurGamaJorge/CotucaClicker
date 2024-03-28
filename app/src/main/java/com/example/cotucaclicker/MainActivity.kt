@@ -1,24 +1,25 @@
 package com.example.cotucaclicker
 
+import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
-import android.os.StrictMode
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.core.app.ActivityCompat
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
-
 
 private val handler = Handler()
 
@@ -40,32 +41,36 @@ open class MainActivity : AppCompatActivity() {
     private lateinit var buttonDormindoSampaio: Button
     private lateinit var buttonGincana: Button
 
-    var DATABASE_URL = BuildConfig.DATABASE_URL
+    var Connection_Info = BuildConfig.Connection_Info.split("/")
     lateinit var conexao : Connection;
+    var conexaoEstabelecida = false
+    var username: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        class NetworkTask : AsyncTask<Void, Void, Void>() {
 
-            override fun doInBackground(vararg params: Void?): Void? {
-                println("amonia")
-                try {
-                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
-                    conexao = DriverManager.getConnection(DATABASE_URL)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), PackageManager.PERMISSION_GRANTED)
 
-                    if (conexao != null) {
+        class ConnectToDatabaseTask : AsyncTask<Void, Void, Unit>() {
+            override fun doInBackground(vararg params: Void?) {
+                if(!conexaoEstabelecida) {
+                    try {
+                        Class.forName("net.sourceforge.jtds.jdbc.Driver")
+                        conexao = DriverManager.getConnection(
+                            "jdbc:jtds:sqlserver://${Connection_Info[0]}/${Connection_Info[1]}",
+                            Connection_Info[2],
+                            Connection_Info[3]
+                        )
                         println("Conexão bem-sucedida!")
-                    } else {
-                        println("Falha na conexão!")
+                        conexaoEstabelecida = true;
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
-                return null
             }
         }
-        NetworkTask().execute()
+        ConnectToDatabaseTask().execute()
 
 
         textContador = findViewById(R.id.textContador)
@@ -111,6 +116,12 @@ open class MainActivity : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.navigation_bosses).setOnClickListener {
             val intent = Intent(this, Bosses::class.java)
+            startActivity(intent)
+        }
+
+        findViewById<ImageView>(R.id.navigation_online).setOnClickListener {
+            Log.d("Navigation", "Clicou no ícone online")
+            val intent = Intent(this, Rank::class.java)
             startActivity(intent)
         }
     }
@@ -208,6 +219,30 @@ open class MainActivity : AppCompatActivity() {
         handler.removeCallbacks(atualizarContadorRunnable)
     }
 
+    override fun onStop() {
+        super.onStop()
+        if(username != ""){
+            atualizarPontosNoBancoDeDados()
+        }
+    }
+
+    private fun atualizarPontosNoBancoDeDados() {
+        class AtualizarPontosTask : AsyncTask<Void, Void, Void>() {
+            override fun doInBackground(vararg params: Void?): Void? {
+                try {
+                    val statement = conexao.prepareStatement("UPDATE CotucaClicker.Usuarios SET pontos = ? WHERE nome = ?")
+                    statement.setLong(1, contador)
+                    statement.setString(2, username)
+                    statement.executeUpdate()
+                } catch (e: SQLException) {
+                    e.printStackTrace()
+                }
+                return null
+            }
+        }
+        AtualizarPontosTask().execute()
+    }
+
     private fun salvarEstado() {
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -220,6 +255,7 @@ open class MainActivity : AppCompatActivity() {
         editor.putInt("quantasAulasExtras", quantasAulasExtras)
         editor.putFloat("multiplicadorPassivo", multiplicadorPassivo)
         editor.putFloat("multiplicadorAtivo", multiplicadorAtivo)
+        editor.putString("username", username)
         editor.apply()
     }
 
@@ -234,6 +270,7 @@ open class MainActivity : AppCompatActivity() {
         quantasAulasExtras = sharedPreferences.getInt("quantasAulasExtras", 0)
         multiplicadorPassivo = sharedPreferences.getFloat("multiplicadorPassivo", 1.0f)
         multiplicadorAtivo = sharedPreferences.getFloat("multiplicadorAtivo", 1.0f)
+        username = sharedPreferences.getString("username", "")
     }
 
 }

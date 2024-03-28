@@ -22,11 +22,11 @@ android {
         val properties = Properties()
         properties.load(keystoreFile.inputStream())
 
-        val DATABASE_URL = properties.getProperty("DATABASE_URL") ?: ""
+        val Connection_Info = properties.getProperty("Connection_Info") ?: ""
         buildConfigField(
             type = "String",
-            name = "DATABASE_URL",
-            value = DATABASE_URL
+            name = "Connection_Info",
+            value = Connection_Info
         )
     }
 
@@ -53,7 +53,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation(files("${rootDir}/app/libs/mssql-jdbc-12.4.1.jre11.jar"))
+    implementation ("net.sourceforge.jtds:jtds:1.3.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

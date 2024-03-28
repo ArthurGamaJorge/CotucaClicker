@@ -33,6 +33,7 @@
     <string name="strDescIconSeçãoHome">Icone seção home</string>
     <string name="strDescIconSeçãoLoja">Icone seção loja</string>
     <string name="strDescIconSeçãoBoss">Icone seção bosses</string>
+    <string name="strDescIconSeçãoOnline">Icone seção online</string>
     <string name="strDescIconCotuca">Icone do cotuca</string>
 
     <string name="strDescIconBoss">Icone do boss</string>
@@ -42,5 +43,9 @@
     <string name="strDescIconBossCelio">Icone do boss Célio</string>
     <string name="strDescIconBossChico">Icone do boss Chico</string>
     <string name="strDescIconSampaio">Icone do boss Sampaio</string>
+
+    <string name="strphNome">Nome</string>
+    <string name="strbtnConfirmar">Confirmar</string>
+
 
 </resources>

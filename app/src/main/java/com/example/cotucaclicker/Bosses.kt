@@ -116,6 +116,10 @@ class Bosses : MainActivity() {
         findViewById<ImageView>(R.id.navigation_home).setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+
+        findViewById<ImageView>(R.id.navigation_online).setOnClickListener {
+            startActivity(Intent(this, Rank::class.java))
+        }
     }
 
     private fun resetBoss(nome: String, vidaTotal: Int) {
