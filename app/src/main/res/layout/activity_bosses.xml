@@ -62,8 +62,10 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="152dp"
-        android:layout_height="219dp"
+        android:layout_width="190dp"
+        android:layout_height="217dp"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@color/black"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -94,6 +96,50 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="@string/strBossSimone"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Barbarinha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/strDescIconBossBarbarinha"
+                    android:src="@drawable/barbarinha" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/strBossBarbarinha"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/Trigo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/strDescIconBossTrigo"
+                    android:src="@drawable/trigo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/strBossTrigo"
                     android:textColor="@android:color/black"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -208,6 +254,28 @@
                     android:textSize="20sp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/Maligno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/strDescIconMaligno"
+                    android:src="@drawable/maligno" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/strMaligno"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
@@ -227,8 +295,8 @@
 
     <TextView
         android:id="@+id/VidaBoss"
-        android:layout_width="246dp"
-        android:layout_height="64dp"
+        android:layout_width="321dp"
+        android:layout_height="43dp"
         android:text="@string/strBossVida"
         android:textAlignment="center"
         android:textColor="@android:color/black"
@@ -237,7 +305,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.383" />
+        app:layout_constraintVertical_bias="0.367" />
 
     <Button
         android:id="@+id/buttonGincana"
@@ -307,10 +375,9 @@
         android:textColor="@android:color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/iconBoss"
-        app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toStartOf="@+id/iconBoss"
-        app:layout_constraintTop_toTopOf="@+id/iconBoss"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

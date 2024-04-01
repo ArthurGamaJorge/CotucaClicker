@@ -17,9 +17,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.google.android.material.snackbar.Snackbar
 import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.SQLException
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+
 
 private val handler = Handler()
 
@@ -45,6 +48,11 @@ open class MainActivity : AppCompatActivity() {
     lateinit var conexao : Connection;
     var conexaoEstabelecida = false
     var username: String? = ""
+
+    var isBlocked: Boolean = false
+    var consecutiveClicks = 0
+    val clickTimes = mutableListOf<Long>()
+    var lastClickTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,31 +90,55 @@ open class MainActivity : AppCompatActivity() {
 
         restaurarEstado()
 
-        danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
+        danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round((quantosSucosBandecos + 1) * multiplicadorAtivo)} click"
 
         handler.post(atualizarContadorRunnable)
         handler.post(atualizarCooldownSampaio)
         handler.post(atualizarCooldownGincana)
 
         botaoContador.setOnClickListener {
-            val scaleX = ObjectAnimator.ofFloat(botaoContador, View.SCALE_X, 0.9f)
-            val scaleY = ObjectAnimator.ofFloat(botaoContador, View.SCALE_Y, 0.9f)
-            val scaleDown = AnimatorSet().apply {
-                play(scaleX).with(scaleY)
-                duration = 100
-            }
+            if (!isBlocked) {
+                val currentTime = System.currentTimeMillis()
+                val interval = currentTime - lastClickTime
+                if (clickTimes.size >= 2) {
+                    val lastInterval = clickTimes[clickTimes.size - 1] - clickTimes[clickTimes.size - 2]
 
-            val scaleXBack = ObjectAnimator.ofFloat(botaoContador, View.SCALE_X, 1.0f)
-            val scaleYBack = ObjectAnimator.ofFloat(botaoContador, View.SCALE_Y, 1.0f)
-            val scaleUp = AnimatorSet().apply {
-                play(scaleXBack).with(scaleYBack)
-                startDelay = 100
-                duration = 100
-            }
+                    if (Math.abs(interval - lastInterval) <= 5) {
+                        consecutiveClicks++
+                    } else {
+                        consecutiveClicks = 0
+                    }
 
-            scaleDown.start()
-            scaleUp.start()
-            btnClicar(it)
+                    if (consecutiveClicks >= 10) {
+                        bloquearCliques()
+                        val snackbar = Snackbar.make(findViewById(android.R.id.content), "Uso de auto clicker detectado -> Clicks bloqueados por 60 segundos, sair da tela aumentará o tempo", Snackbar.LENGTH_LONG)
+                        snackbar.duration = 60000
+                        snackbar.show()
+                        return@setOnClickListener
+                    }
+                }
+                clickTimes.add(currentTime)
+                lastClickTime = currentTime
+
+                val scaleX = ObjectAnimator.ofFloat(botaoContador, View.SCALE_X, 0.9f)
+                val scaleY = ObjectAnimator.ofFloat(botaoContador, View.SCALE_Y, 0.9f)
+                val scaleDown = AnimatorSet().apply {
+                    play(scaleX).with(scaleY)
+                    duration = 100
+                }
+
+                val scaleXBack = ObjectAnimator.ofFloat(botaoContador, View.SCALE_X, 1.0f)
+                val scaleYBack = ObjectAnimator.ofFloat(botaoContador, View.SCALE_Y, 1.0f)
+                val scaleUp = AnimatorSet().apply {
+                    play(scaleXBack).with(scaleYBack)
+                    startDelay = 100
+                    duration = 100
+                }
+
+                scaleDown.start()
+                scaleUp.start()
+                btnClicar(it)
+            }
         }
 
         findViewById<ImageView>(R.id.navigation_loja).setOnClickListener {
@@ -126,9 +158,26 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun Long.formatarComPontos(): String {
+        val symbols = DecimalFormatSymbols().apply {
+            groupingSeparator = '.'
+        }
+        val format = DecimalFormat("#,###", symbols)
+        return format.format(this)
+    }
+
     fun btnClicar(view: View){
         contador += ((quantosSucosBandecos+1) * multiplicadorAtivo).toLong()
-        textContador.text = contador.toString()
+        textContador.text = contador.formatarComPontos();
+    }
+
+    fun bloquearCliques() {
+        isBlocked = true
+        handler.postDelayed({
+            isBlocked = false
+            consecutiveClicks = 0
+            clickTimes.clear()
+        }, 15000.toLong())
     }
 
     fun ativarDormindoSampaio(view: View?) {
@@ -138,7 +187,7 @@ open class MainActivity : AppCompatActivity() {
             cooldownSampaio = 20
             buttonDormindoSampaio.text = cooldownSampaio.toString()
             buttonDormindoSampaio.setBackgroundColor(0xFFFF0000.toInt())
-            danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
+            danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round((quantosSucosBandecos + 1) * multiplicadorAtivo)} click"
         } else {
             Toast.makeText(this, "A habilidade ainda está em cooldown", Toast.LENGTH_SHORT).show()
         }
@@ -152,7 +201,7 @@ open class MainActivity : AppCompatActivity() {
             cooldownGincana = 60
             buttonGincana.text = cooldownGincana.toString()
             buttonGincana.setBackgroundColor(0xFFFF0000.toInt())
-            danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
+            danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round((quantosSucosBandecos + 1) * multiplicadorAtivo)} click"
         } else {
             Toast.makeText(this, "A habilidade ainda está em cooldown", Toast.LENGTH_SHORT).show()
         }
@@ -166,7 +215,7 @@ open class MainActivity : AppCompatActivity() {
                 if(cooldownSampaio == 10){
                     multiplicadorPassivo -= 2.0f
                     buttonDormindoSampaio.setBackgroundColor(0xE2312C.toInt())
-                    danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
+                    danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round((quantosSucosBandecos + 1) * multiplicadorAtivo)} click"
                 }
             } else {
                 buttonDormindoSampaio.text = "Zz"
@@ -184,7 +233,7 @@ open class MainActivity : AppCompatActivity() {
                     multiplicadorPassivo -= 2.0f
                     multiplicadorAtivo -= 2.0f
                     buttonGincana.setBackgroundColor(0xE2312C.toInt())
-                    danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round(quantosSucosBandecos+1 *multiplicadorAtivo)} click"
+                    danoPorSegundo.text = "${Math.round((quantasHorasSono * multiplicadorPassivo * 2))} DPS | ${Math.round((quantosSucosBandecos + 1) * multiplicadorAtivo)} click"
                 }
             } else {
                 buttonGincana.text = "Gincana"
@@ -198,7 +247,7 @@ open class MainActivity : AppCompatActivity() {
     private val atualizarContadorRunnable: Runnable = object : Runnable {
         override fun run() {
             contador += (quantasHorasSono * multiplicadorPassivo).toInt()
-            textContador.text = contador.toString()
+            textContador.text = contador.formatarComPontos()
             handler.postDelayed(this, 500)
         }
     }
@@ -211,6 +260,20 @@ open class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         restaurarEstado()
+        if (isBlocked) {
+            val snackbar = Snackbar.make(findViewById(android.R.id.content), "Uso de auto clicker detectado -> Clicks bloqueados por 60 segundos, sair da tela aumentará o tempo", Snackbar.LENGTH_LONG)
+            snackbar.duration = 60000
+            snackbar.show()
+            handler.postDelayed({
+                removerBloqueio()
+            }, 60000.toLong())
+        }
+    }
+
+    private fun removerBloqueio() {
+        isBlocked = false
+        consecutiveClicks = 0
+        clickTimes.clear()
     }
 
     override fun onDestroy() {
@@ -230,11 +293,11 @@ open class MainActivity : AppCompatActivity() {
         class AtualizarPontosTask : AsyncTask<Void, Void, Void>() {
             override fun doInBackground(vararg params: Void?): Void? {
                 try {
-                    val statement = conexao.prepareStatement("UPDATE CotucaClicker.Usuarios SET pontos = ? WHERE nome = ?")
+                    val statement = conexao.prepareStatement("UPDATE CotucaClicker.Usuario SET pontos = ? WHERE nome = ?")
                     statement.setLong(1, contador)
                     statement.setString(2, username)
                     statement.executeUpdate()
-                } catch (e: SQLException) {
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
                 return null
@@ -255,6 +318,7 @@ open class MainActivity : AppCompatActivity() {
         editor.putInt("quantasAulasExtras", quantasAulasExtras)
         editor.putFloat("multiplicadorPassivo", multiplicadorPassivo)
         editor.putFloat("multiplicadorAtivo", multiplicadorAtivo)
+        editor.putBoolean("isBlocked", isBlocked)
         editor.putString("username", username)
         editor.apply()
     }
@@ -270,6 +334,7 @@ open class MainActivity : AppCompatActivity() {
         quantasAulasExtras = sharedPreferences.getInt("quantasAulasExtras", 0)
         multiplicadorPassivo = sharedPreferences.getFloat("multiplicadorPassivo", 1.0f)
         multiplicadorAtivo = sharedPreferences.getFloat("multiplicadorAtivo", 1.0f)
+        isBlocked = sharedPreferences.getBoolean("isBlocked", false)
         username = sharedPreferences.getString("username", "")
     }
 

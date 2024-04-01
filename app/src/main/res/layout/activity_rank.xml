@@ -25,50 +25,54 @@
 
     <ScrollView
         android:id="@+id/scrollViewUsers"
-        android:layout_width="329dp"
-        android:layout_height="508dp"
+        android:layout_width="371dp"
+        android:layout_height="462dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.451">
+        app:layout_constraintVertical_bias="0.342">
 
-        <!-- Adicione sua tabela de usuários aqui -->
-        <!-- Adicione sua tabela de usuários aqui -->
         <TableLayout
             android:id="@+id/tableUsers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <!-- Cabeçalho da tabela -->
             <TableRow
+                android:layout_width="357dp"
+                android:layout_height="60dp"
                 android:background="#E2312C">
 
                 <TextView
-                    android:layout_width="96dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:padding="8dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     android:text="Nome"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="64dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:padding="8dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     android:text="Pontos"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
             </TableRow>
-
-            <!-- Linhas geradas pelo SQL -->
-            <!-- As linhas serão adicionadas dinamicamente pelo código Kotlin -->
 
         </TableLayout>
     </ScrollView>
@@ -136,11 +140,39 @@
         android:ems="10"
         android:hint="@string/strphNome"
         android:inputType="text"
+        android:maxLength="50"
+        android:textColor="@color/black"
+        android:textCursorDrawable="@drawable/color_cursor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.102"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.043" />
+
+    <TextView
+        android:id="@+id/lbcarregando"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:shadowColor="#E1312C"
+        android:text="Carregando...."
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.797" />
+
+    <ImageView
+        android:id="@+id/btnReload"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.953"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.838"
+        app:srcCompat="@drawable/reload" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

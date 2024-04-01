@@ -13,6 +13,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 
 class Bosses : MainActivity() {
     private lateinit var vidaBossTextView: TextView
@@ -27,6 +29,7 @@ class Bosses : MainActivity() {
     private val handler = Handler()
     private var contadorTempo = 30 + (quantasAulasExtras/2).toInt()
     private var fase2Ativa = false
+    private var fase3Ativa = false
     private var originalHeight = 0
     private lateinit var bossAnimation: ObjectAnimator
     private var isBossFading = false
@@ -47,11 +50,14 @@ class Bosses : MainActivity() {
         tempoBoss = findViewById(R.id.tempoBoss)
 
         val simoneLayout: LinearLayout = findViewById(R.id.Simone)
+        val barbarinhaLayout: LinearLayout = findViewById(R.id.Barbarinha)
+        val trigoLayout: LinearLayout = findViewById(R.id.Trigo)
         val AnaPaulaLayout: LinearLayout = findViewById(R.id.AnaPaula)
         val JodirLayout: LinearLayout = findViewById(R.id.Jodir)
         val CelioLayout: LinearLayout = findViewById(R.id.Celio)
         val chicoLayout: LinearLayout = findViewById(R.id.Chico)
         val sampaioLayout: LinearLayout = findViewById(R.id.Sampaio)
+        val malignoLayout: LinearLayout = findViewById(R.id.Maligno)
 
         handler.post(atualizarCooldownSampaio)
         handler.post(atualizarCooldownGincana)
@@ -59,25 +65,51 @@ class Bosses : MainActivity() {
         handler.post(atualizarContadorTempoBoss)
 
         iconBossImageView.setOnClickListener {
-            val scaleX = ObjectAnimator.ofFloat(iconBossImageView, View.SCALE_X, 0.9f)
-            val scaleY = ObjectAnimator.ofFloat(iconBossImageView, View.SCALE_Y, 0.9f)
-            val scaleDown = AnimatorSet().apply {
-                play(scaleX).with(scaleY)
-                duration = 100
-            }
 
-            val scaleXBack = ObjectAnimator.ofFloat(iconBossImageView, View.SCALE_X, 1.0f)
-            val scaleYBack = ObjectAnimator.ofFloat(iconBossImageView, View.SCALE_Y, 1.0f)
-            val scaleUp = AnimatorSet().apply {
-                play(scaleXBack).with(scaleYBack)
-                startDelay = 100
-                duration = 100
-            }
+            if (!isBlocked) {
+                val currentTime = System.currentTimeMillis()
+                val interval = currentTime - lastClickTime
+                if (clickTimes.size >= 2) {
+                    val lastInterval =
+                        clickTimes[clickTimes.size - 1] - clickTimes[clickTimes.size - 2]
 
-            scaleDown.start()
-            scaleUp.start()
-            if(!isBossFading){
-                clicarBoss(it)
+                    if (Math.abs(interval - lastInterval) <= 5) {
+                        consecutiveClicks++
+                    } else {
+                        consecutiveClicks = 0
+                    }
+
+                    if (consecutiveClicks >= 10) {
+                        bloquearCliques()
+                        val snackbar = Snackbar.make(findViewById(android.R.id.content), "Uso de auto clicker detectado -> Clicks bloqueados por 60 segundos, sair da tela aumentará o tempo", Snackbar.LENGTH_LONG)
+                        snackbar.duration = 60000
+                        snackbar.show()
+                        return@setOnClickListener
+                    }
+                }
+                clickTimes.add(currentTime)
+                lastClickTime = currentTime
+
+                val scaleX = ObjectAnimator.ofFloat(iconBossImageView, View.SCALE_X, 0.9f)
+                val scaleY = ObjectAnimator.ofFloat(iconBossImageView, View.SCALE_Y, 0.9f)
+                val scaleDown = AnimatorSet().apply {
+                    play(scaleX).with(scaleY)
+                    duration = 100
+                }
+
+                val scaleXBack = ObjectAnimator.ofFloat(iconBossImageView, View.SCALE_X, 1.0f)
+                val scaleYBack = ObjectAnimator.ofFloat(iconBossImageView, View.SCALE_Y, 1.0f)
+                val scaleUp = AnimatorSet().apply {
+                    play(scaleXBack).with(scaleYBack)
+                    startDelay = 100
+                    duration = 100
+                }
+
+                scaleDown.start()
+                scaleUp.start()
+                if (!isBossFading) {
+                    clicarBoss(it)
+                }
             }
         }
 
@@ -85,24 +117,36 @@ class Bosses : MainActivity() {
             resetBoss("Simone", 5000)
         }
 
+        barbarinhaLayout.setOnClickListener {
+            resetBoss("Barbarinha", 12000)
+        }
+
+        trigoLayout.setOnClickListener {
+            resetBoss("Trigo", 25000)
+        }
+
         AnaPaulaLayout.setOnClickListener {
-            resetBoss("Ana Paula", 12000)
+            resetBoss("Ana Paula", 50000)
         }
 
         JodirLayout.setOnClickListener {
-            resetBoss("Jodir", 40000)
+            resetBoss("Jodir", 90000)
         }
 
         CelioLayout.setOnClickListener {
-            resetBoss("Celio", 80000)
+            resetBoss("Celio", 200000)
         }
 
         chicoLayout.setOnClickListener {
-            resetBoss("Chico", 150000)
+            resetBoss("Chico", 425000)
         }
 
         sampaioLayout.setOnClickListener {
-            resetBoss("Sampaio", 500000)
+            resetBoss("Sampaio", 1200000)
+        }
+
+        malignoLayout.setOnClickListener {
+            resetBoss("Maligno", 3000000)
         }
 
         buttonGincana.setOnClickListener {
@@ -127,15 +171,19 @@ class Bosses : MainActivity() {
         vidaBossTextView.text = "$vidaTotal/$vidaTotal"
         textFalaBoss.text = when (nome) {
             "Simone" -> "Para de clicar"
+            "Barbarinha" -> "Eu quero a redação perfeita"
+            "Trigo" -> "Hi, I love Taylor Swift"
             "Ana Paula" -> "Isso da cancer ein"
             "Jodir" -> "Vamos fazer um mergulho"
             "Celio" -> "Eu sou a verdade absoluta"
             "Chico" -> "*Chico começa a voar*"
             "Sampaio" -> "Dormindo na aula do Sampaio?"
+            "Maligno" -> "Olá Malignicios"
             else -> "Boss inválido"
         }
         iconBossImageView.setImageResource(resources.getIdentifier(nome.replace(" ", "").toLowerCase(), "drawable", packageName))
         fase2Ativa = false
+        fase3Ativa = false
         contadorTempo = 30 + (quantasAulasExtras/2).toInt()
         tempoBoss.text = contadorTempo.toString()
     }
@@ -258,6 +306,8 @@ class Bosses : MainActivity() {
             if (vida[0].toInt() - ((quantosSucosBandecos + 1) * multiplicadorAtivo).toInt() < vida[1].toInt() / 2) {
                 when (nomeBossTextView.text) {
                     "Boss: Simone" -> textFalaBoss.text = "*Começa a bater na mesa*"
+                    "Boss: Barbarinha" -> textFalaBoss.text = "Qual é esse pokemon?"
+                    "Boss: Trigo" -> textFalaBoss.text = "LOOK! A monkey!"
                     "Boss: Ana Paula" -> textFalaBoss.text = "ô inferno (falo inferno por causa de Jesus)"
                     "Boss: Jodir" -> textFalaBoss.text = "*Plopt*"
                     "Boss: Celio" -> textFalaBoss.text = "*Alarme começa a tocar*"
@@ -266,13 +316,19 @@ class Bosses : MainActivity() {
                         textFalaBoss.text = "Celulares na aula do Sampaio?"
                         iconBossImageView.setImageResource(R.drawable.celular)
                     }
+                    "Boss: Maligno" -> {
+                        if(!fase3Ativa){
+                            textFalaBoss.text = "Parem de estudar java e foquem no subway money"
+                            iconBossImageView.setImageResource(R.drawable.maligniciofase2)
+                        }
+                    }
                 }
             }
 
             if (vida[0].toInt() < vida[1].toInt() * 0.2 && !fase2Ativa) {
                 val layoutParams = iconBossImageView.layoutParams
                 originalHeight = iconBossImageView.height
-                if (nomeBossTextView.text == "Boss: Chico" || nomeBossTextView.text == "Boss: Sampaio") {
+                if (nomeBossTextView.text == "Boss: Chico" || nomeBossTextView.text == "Boss: Sampaio" || nomeBossTextView.text == "Boss: Maligno") {
                     if (nomeBossTextView.text == "Boss: Chico") {
                         startBossAnimation(200 + (quantosEsgotos*10).toLong(), 200.0f, (originalHeight * 0.5).toFloat())
                         layoutParams.width = (originalHeight * 0.4).toInt()
@@ -282,6 +338,14 @@ class Bosses : MainActivity() {
                         startBossAnimation(100 + (quantosEsgotos*10).toLong(), 300.0f, (originalHeight * 0.6).toFloat())
                         layoutParams.width = (originalHeight * 0.2).toInt()
                         layoutParams.height = (originalHeight * 0.2).toInt()
+                    }
+                    if (nomeBossTextView.text == "Boss: Maligno") {
+                        startBossAnimation(50 + (quantosEsgotos*10).toLong(), 500.0f, (originalHeight * 0.6).toFloat())
+                        layoutParams.width = (originalHeight * 0.2).toInt()
+                        layoutParams.height = (originalHeight * 0.2).toInt()
+                        textFalaBoss.text = "ele está pagando DEMAIS"
+                        iconBossImageView.setImageResource(R.drawable.maligniciofase3)
+                        fase3Ativa = true;
                     }
                     iconBossImageView.layoutParams = layoutParams
                     fase2Ativa = true
@@ -308,41 +372,67 @@ class Bosses : MainActivity() {
                             multiplicadorAtivoTemp += 0.05f
                         }
                     }
-                    "Boss: Ana Paula" -> {
+                    "Boss: Barbarinha" -> {
                         if(multiplicadorPassivoAtual < 10){
                             multiplicadorPassivoTemp += 0.05f
                         }
                     }
+                    "Boss: Trigo" -> {
+                        if(multiplicadorPassivoAtual < 15){
+                            multiplicadorAtivoTemp += 0.05f
+                        }
+                    }
+                    "Boss: Ana Paula" -> {
+                        if(multiplicadorPassivoAtual < 20){
+                            multiplicadorPassivoTemp += 0.05f
+                        }
+                    }
                     "Boss: Jodir" -> {
-                        if(multiplicadorAtivoAtual < 15){
+                        if(multiplicadorAtivoAtual < 25){
                             multiplicadorAtivoTemp += 0.05f
                         }
                     }
                     "Boss: Celio" -> {
-                        if(multiplicadorPassivoAtual < 20){
+                        if(multiplicadorPassivoAtual < 30){
                             multiplicadorPassivoTemp += 0.1f
                         }
                     }
                     "Boss: Chico" -> {
-                        if(multiplicadorAtivoAtual < 25){
+                        if(multiplicadorAtivoAtual < 35){
                             multiplicadorAtivoTemp += 0.1f
                         }
                     }
                     "Boss: Sampaio" -> {
-                        if(multiplicadorPassivoAtual < 30 && multiplicadorAtivoAtual < 30){
+                        if(multiplicadorPassivoAtual < 40 && multiplicadorAtivoAtual < 40){
                             multiplicadorPassivoTemp += 0.1f
                             multiplicadorAtivoTemp += 0.1f
                         } else{
-                            if(multiplicadorPassivoAtual < 30){
+                            if(multiplicadorPassivoAtual < 40){
                                 multiplicadorPassivoTemp += 0.1f
                             }
                             else {
-                                if(multiplicadorAtivoAtual < 30){
+                                if(multiplicadorAtivoAtual < 40){
                                     multiplicadorAtivoTemp += 0.1f
                                 }
                             }
                         }
                         iconBossImageView.setImageResource(R.drawable.sampaio)
+                    }
+                    "Boss: Maligno" -> {
+                        if(multiplicadorPassivoAtual < 45 && multiplicadorAtivoAtual < 45){
+                            multiplicadorPassivoTemp += 0.15f
+                            multiplicadorAtivoTemp += 0.15f
+                        } else{
+                            if(multiplicadorPassivoAtual < 45){
+                                multiplicadorPassivoTemp += 0.15f
+                            }
+                            else {
+                                if(multiplicadorAtivoAtual < 45){
+                                    multiplicadorAtivoTemp += 0.15f
+                                }
+                            }
+                        }
+                        iconBossImageView.setImageResource(R.drawable.maligno)
                     }
                 }
                 val layoutParams = iconBossImageView.layoutParams

@@ -30,7 +30,7 @@ class Loja : MainActivity() {
         buttonSucoBandeco.text = ("${Math.round(0.5 * Math.pow((quantosSucosBandecos + 1).toDouble(), 1.7) * 50).toInt()} - suco do bandeco")
         buttonHorasSono.text = ("${Math.round(0.5 * Math.pow((quantasHorasSono + 1).toDouble(), 1.7) * 150).toInt()} - horas de sono")
         buttonEsgoto.text = ("${Math.round(0.5 * Math.pow((quantosEsgotos + 1).toDouble(), 1.7) * 200).toInt()} - esgoto")
-        buttonAulaExtra.text = ("${Math.round(0.5 * Math.pow((quantasAulasExtras + 1).toDouble(), 1.7) * 500).toInt()} - aula extra")
+        buttonAulaExtra.text = ("${Math.round(0.5 * Math.pow((quantasAulasExtras + 1).toDouble(), 1.7) * 3000).toInt()} - aula extra")
 
         TextQuantosSucos = findViewById(R.id.TextQuantosSucos)
         TextQuantasHorasSono = findViewById(R.id.TextQuantasHorasSono)
@@ -98,13 +98,13 @@ class Loja : MainActivity() {
     }
 
     fun comprarAulaExtra(view: android.view.View?) {
-        if (contador >= (0.5 * Math.pow((quantasAulasExtras + 1).toDouble(), 1.7) * 500).toInt()) {
+        if (contador >= (0.5 * Math.pow((quantasAulasExtras + 1).toDouble(), 1.7) * 3000).toInt()) {
             Toast.makeText(this, "Aula extra comprada", Toast.LENGTH_SHORT).show()
-            contador -= Math.round(0.5 * Math.pow((quantasAulasExtras + 1).toDouble(), 1.7) * 500).toInt()
+            contador -= Math.round(0.5 * Math.pow((quantasAulasExtras + 1).toDouble(), 1.7) * 3000).toInt()
             quantasAulasExtras++
             TextQuantasAulasExtras.text = quantasAulasExtras.toString()
             textContador.text = contador.toString()
-            buttonAulaExtra.text = ("${Math.round(0.5 * Math.pow((quantasAulasExtras + 1).toDouble(), 1.7) * 500).toInt()} - aula extra")
+            buttonAulaExtra.text = ("${Math.round(0.5 * Math.pow((quantasAulasExtras + 1).toDouble(), 1.7) * 3000).toInt()} - aula extra")
         } else {
             Toast.makeText(this, "Você não tem nota o suficiente", Toast.LENGTH_SHORT).show()
         }

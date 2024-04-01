@@ -22,11 +22,14 @@
     <string name="strBossNome">Boss: não escolhido</string>
     <string name="strBossVida">0/Vida</string>
     <string name="strBossSimone">Simone</string>
+    <string name="strBossBarbarinha">Barbarinha</string>
+    <string name="strBossTrigo">Trigo</string>
     <string name="strBossAnaPaula">Ana Paula</string>
     <string name="strBossJodir">Jodir</string>
     <string name="strBossCelio">Célio</string>
     <string name="strBossChico">Chico</string>
     <string name="strSampaio">Sampaio</string>
+    <string name="strMaligno">Maligno</string>
     <string name="strTempoBoss">30</string>
     <string name="strFalaBoss">Fala do boss</string>
 
@@ -38,11 +41,14 @@
 
     <string name="strDescIconBoss">Icone do boss</string>
     <string name="strDescIconBossSimone">Icone do boss Simone</string>
+    <string name="strDescIconBossBarbarinha">Icone do boss Barbarinha</string>
+    <string name="strDescIconBossTrigo">Icone do boss Trigo</string>
     <string name="strDescIconBossAnaPaula">Icone do boss Ana Paula</string>
     <string name="strDescIconBossJodir">Icone do boss Jodir</string>
     <string name="strDescIconBossCelio">Icone do boss Célio</string>
     <string name="strDescIconBossChico">Icone do boss Chico</string>
     <string name="strDescIconSampaio">Icone do boss Sampaio</string>
+    <string name="strDescIconMaligno">Icone do boss Maligno</string>
 
     <string name="strphNome">Nome</string>
     <string name="strbtnConfirmar">Confirmar</string>
