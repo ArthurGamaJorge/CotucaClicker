@@ -66,7 +66,7 @@ class Bosses : MainActivity() {
 
         iconBossImageView.setOnClickListener {
 
-            if (!isBlocked) {
+            if (!isBlocked && !isBossFading) {
                 val currentTime = System.currentTimeMillis()
                 val interval = currentTime - lastClickTime
                 if (clickTimes.size >= 2) {
@@ -107,9 +107,7 @@ class Bosses : MainActivity() {
 
                 scaleDown.start()
                 scaleUp.start()
-                if (!isBossFading) {
-                    clicarBoss(it)
-                }
+                clicarBoss(it)
             }
         }
 
@@ -167,6 +165,7 @@ class Bosses : MainActivity() {
     }
 
     private fun resetBoss(nome: String, vidaTotal: Int) {
+        originalHeight = iconBossImageView.height
         nomeBossTextView.text = "Boss: $nome"
         vidaBossTextView.text = "$vidaTotal/$vidaTotal"
         textFalaBoss.text = when (nome) {
@@ -190,11 +189,9 @@ class Bosses : MainActivity() {
 
     private val atualizarContadorBoss = object : Runnable {
         override fun run() {
-            if (nomeBossTextView.text != "Boss: não escolhido") {
-                val vida = vidaBossTextView.text.split('/')
-                if (vida[0].toInt() > 0) {
-                    vidaBossTextView.text = "${vida[0].toInt() - (quantasHorasSono * multiplicadorPassivo).toInt()}/${vida[1]}"
-                }
+            if (nomeBossTextView.text != "Boss: não escolhido" && !isBossFading) {
+                val dano = (quantasHorasSono * multiplicadorPassivo).toInt()
+                sofrerDano(dano)
             }
             handler.postDelayed(this, 500)
         }
@@ -299,165 +296,133 @@ class Bosses : MainActivity() {
 
     fun clicarBoss(view: View) {
         if (nomeBossTextView.text != "Boss: não escolhido") {
-            val vida = vidaBossTextView.text.split('/')
-            vidaBossTextView.text =
-                "${vida[0].toInt() - ((quantosSucosBandecos + 1) * multiplicadorAtivo).toInt()}/${vida[1].toInt()}"
+            val dano = ((quantosSucosBandecos + 1) * multiplicadorAtivo).toInt()
+            sofrerDano(dano)
+        }
+    }
 
-            if (vida[0].toInt() - ((quantosSucosBandecos + 1) * multiplicadorAtivo).toInt() < vida[1].toInt() / 2) {
-                when (nomeBossTextView.text) {
-                    "Boss: Simone" -> textFalaBoss.text = "*Começa a bater na mesa*"
-                    "Boss: Barbarinha" -> textFalaBoss.text = "Qual é esse pokemon?"
-                    "Boss: Trigo" -> textFalaBoss.text = "LOOK! A monkey!"
-                    "Boss: Ana Paula" -> textFalaBoss.text = "ô inferno (falo inferno por causa de Jesus)"
-                    "Boss: Jodir" -> textFalaBoss.text = "*Plopt*"
-                    "Boss: Celio" -> textFalaBoss.text = "*Alarme começa a tocar*"
-                    "Boss: Chico" -> textFalaBoss.text = "EU DISSE PARA LER A APOSTILA"
-                    "Boss: Sampaio" -> {
-                        textFalaBoss.text = "Celulares na aula do Sampaio?"
-                        iconBossImageView.setImageResource(R.drawable.celular)
-                    }
-                    "Boss: Maligno" -> {
-                        if(!fase3Ativa){
-                            textFalaBoss.text = "Parem de estudar java e foquem no subway money"
-                            iconBossImageView.setImageResource(R.drawable.maligniciofase2)
-                        }
+    fun sofrerDano(dano: Int) {
+        val vida = vidaBossTextView.text.split('/')
+        val vidaAtual = vida[0].toInt() - dano
+        val vidaTotal = vida[1].toInt()
+        vidaBossTextView.text = "$vidaAtual/$vidaTotal"
+
+        if (vidaAtual <= vidaTotal / 2) {
+            when (nomeBossTextView.text) {
+                "Boss: Simone" -> textFalaBoss.text = "*Começa a bater na mesa*"
+                "Boss: Barbarinha" -> textFalaBoss.text = "Qual é esse pokemon?"
+                "Boss: Trigo" -> textFalaBoss.text = "LOOK! A monkey!"
+                "Boss: Ana Paula" -> textFalaBoss.text = "ô inferno (falo inferno por causa de Jesus)"
+                "Boss: Jodir" -> textFalaBoss.text = "*Plopt*"
+                "Boss: Celio" -> textFalaBoss.text = "*Alarme começa a tocar*"
+                "Boss: Chico" -> textFalaBoss.text = "EU DISSE PARA LER A APOSTILA"
+                "Boss: Sampaio" -> {
+                    textFalaBoss.text = "Celulares na aula do Sampaio?"
+                    iconBossImageView.setImageResource(R.drawable.celular)
+                }
+                "Boss: Maligno" -> {
+                    if (!fase3Ativa) {
+                        textFalaBoss.text = "Parem de estudar java e foquem no subway money"
+                        iconBossImageView.setImageResource(R.drawable.maligniciofase2)
                     }
                 }
             }
+        }
 
-            if (vida[0].toInt() < vida[1].toInt() * 0.2 && !fase2Ativa) {
-                val layoutParams = iconBossImageView.layoutParams
-                originalHeight = iconBossImageView.height
-                if (nomeBossTextView.text == "Boss: Chico" || nomeBossTextView.text == "Boss: Sampaio" || nomeBossTextView.text == "Boss: Maligno") {
-                    if (nomeBossTextView.text == "Boss: Chico") {
-                        startBossAnimation(200 + (quantosEsgotos*10).toLong(), 200.0f, (originalHeight * 0.5).toFloat())
+        if (vidaAtual < vidaTotal * 0.2 && !fase2Ativa) {
+            val layoutParams = iconBossImageView.layoutParams
+            originalHeight = iconBossImageView.height
+            if (nomeBossTextView.text == "Boss: Chico" || nomeBossTextView.text == "Boss: Sampaio" || nomeBossTextView.text == "Boss: Maligno") {
+                when (nomeBossTextView.text) {
+                    "Boss: Chico" -> {
+                        startBossAnimation(200 + (quantosEsgotos * 10).toLong(), 200.0f, (originalHeight * 0.5).toFloat())
                         layoutParams.width = (originalHeight * 0.4).toInt()
                         layoutParams.height = (originalHeight * 0.4).toInt()
                     }
-                    if (nomeBossTextView.text == "Boss: Sampaio") {
-                        startBossAnimation(100 + (quantosEsgotos*10).toLong(), 300.0f, (originalHeight * 0.6).toFloat())
+                    "Boss: Sampaio" -> {
+                        startBossAnimation(100 + (quantosEsgotos * 10).toLong(), 300.0f, (originalHeight * 0.6).toFloat())
                         layoutParams.width = (originalHeight * 0.2).toInt()
                         layoutParams.height = (originalHeight * 0.2).toInt()
                     }
-                    if (nomeBossTextView.text == "Boss: Maligno") {
-                        startBossAnimation(50 + (quantosEsgotos*10).toLong(), 500.0f, (originalHeight * 0.6).toFloat())
+                    "Boss: Maligno" -> {
+                        startBossAnimation(50 + (quantosEsgotos * 10).toLong(), 500.0f, (originalHeight * 0.6).toFloat())
                         layoutParams.width = (originalHeight * 0.2).toInt()
                         layoutParams.height = (originalHeight * 0.2).toInt()
                         textFalaBoss.text = "ele está pagando DEMAIS"
                         iconBossImageView.setImageResource(R.drawable.maligniciofase3)
-                        fase3Ativa = true;
+                        fase3Ativa = true
                     }
-                    iconBossImageView.layoutParams = layoutParams
-                    fase2Ativa = true
                 }
+                iconBossImageView.layoutParams = layoutParams
+                fase2Ativa = true
+            }
+        }
+
+        if (vidaAtual <= 0) {
+            // Lógica para a morte do boss
+            var multiplicadorPassivoAtual = multiplicadorPassivo
+            var multiplicadorAtivoAtual = multiplicadorAtivo
+            var multiplicadorAtivoTemp = 0.0f
+            var multiplicadorPassivoTemp = 0.0f
+
+            if (cooldownGincana >= 40) {
+                multiplicadorAtivoAtual -= 2
+                multiplicadorPassivoAtual -= 2
+            }
+            if (cooldownSampaio >= 10) {
+                multiplicadorPassivoAtual -= 2
             }
 
-            if (vida[0].toInt() - ((quantosSucosBandecos + 1) * multiplicadorAtivo).toInt() <= 0) {
-                var multiplicadorPassivoAtual = multiplicadorPassivo
-                var multiplicadorAtivoAtual = multiplicadorAtivo
-                var multiplicadorAtivoTemp = 0.0f
-                var multiplicadorPassivoTemp = 0.0f
-
-                if(cooldownGincana >= 40){
-                    multiplicadorAtivoAtual -= 2
-                    multiplicadorPassivoAtual -= 2
-                }
-                if(cooldownSampaio >= 10){
-                    multiplicadorPassivoAtual -= 2
-                }
-
-                when (nomeBossTextView.text) {
-                    "Boss: Simone" -> {
-                        if(multiplicadorAtivoAtual < 5){
-                            multiplicadorAtivoTemp += 0.05f
-                        }
-                    }
-                    "Boss: Barbarinha" -> {
-                        if(multiplicadorPassivoAtual < 10){
-                            multiplicadorPassivoTemp += 0.05f
-                        }
-                    }
-                    "Boss: Trigo" -> {
-                        if(multiplicadorPassivoAtual < 15){
-                            multiplicadorAtivoTemp += 0.05f
-                        }
-                    }
-                    "Boss: Ana Paula" -> {
-                        if(multiplicadorPassivoAtual < 20){
-                            multiplicadorPassivoTemp += 0.05f
-                        }
-                    }
-                    "Boss: Jodir" -> {
-                        if(multiplicadorAtivoAtual < 25){
-                            multiplicadorAtivoTemp += 0.05f
-                        }
-                    }
-                    "Boss: Celio" -> {
-                        if(multiplicadorPassivoAtual < 30){
+            when (nomeBossTextView.text) {
+                "Boss: Simone" -> if (multiplicadorAtivoAtual < 5) multiplicadorAtivoTemp += 0.05f
+                "Boss: Barbarinha" -> if (multiplicadorPassivoAtual < 10) multiplicadorPassivoTemp += 0.05f
+                "Boss: Trigo" -> if (multiplicadorPassivoAtual < 15) multiplicadorAtivoTemp += 0.05f
+                "Boss: Ana Paula" -> if (multiplicadorPassivoAtual < 20) multiplicadorPassivoTemp += 0.05f
+                "Boss: Jodir" -> if (multiplicadorAtivoAtual < 25) multiplicadorAtivoTemp += 0.05f
+                "Boss: Celio" -> if (multiplicadorPassivoAtual < 30) multiplicadorPassivoTemp += 0.1f
+                "Boss: Chico" -> if (multiplicadorAtivoAtual < 35) multiplicadorAtivoTemp += 0.1f
+                "Boss: Sampaio" -> {
+                    if (multiplicadorPassivoAtual < 40 && multiplicadorAtivoAtual < 40) {
+                        multiplicadorPassivoTemp += 0.1f
+                        multiplicadorAtivoTemp += 0.1f
+                    } else {
+                        if (multiplicadorPassivoAtual < 40) {
                             multiplicadorPassivoTemp += 0.1f
-                        }
-                    }
-                    "Boss: Chico" -> {
-                        if(multiplicadorAtivoAtual < 35){
+                        } else if (multiplicadorAtivoAtual < 40) {
                             multiplicadorAtivoTemp += 0.1f
                         }
                     }
-                    "Boss: Sampaio" -> {
-                        if(multiplicadorPassivoAtual < 40 && multiplicadorAtivoAtual < 40){
-                            multiplicadorPassivoTemp += 0.1f
-                            multiplicadorAtivoTemp += 0.1f
-                        } else{
-                            if(multiplicadorPassivoAtual < 40){
-                                multiplicadorPassivoTemp += 0.1f
-                            }
-                            else {
-                                if(multiplicadorAtivoAtual < 40){
-                                    multiplicadorAtivoTemp += 0.1f
-                                }
-                            }
-                        }
-                        iconBossImageView.setImageResource(R.drawable.sampaio)
-                    }
-                    "Boss: Maligno" -> {
-                        if(multiplicadorPassivoAtual < 45 && multiplicadorAtivoAtual < 45){
+                    iconBossImageView.setImageResource(R.drawable.sampaio)
+                }
+                "Boss: Maligno" -> {
+                    if (multiplicadorPassivoAtual < 45 && multiplicadorAtivoAtual < 45) {
+                        multiplicadorPassivoTemp += 0.15f
+                        multiplicadorAtivoTemp += 0.15f
+                    } else {
+                        if (multiplicadorPassivoAtual < 45) {
                             multiplicadorPassivoTemp += 0.15f
+                        } else if (multiplicadorAtivoAtual < 45) {
                             multiplicadorAtivoTemp += 0.15f
-                        } else{
-                            if(multiplicadorPassivoAtual < 45){
-                                multiplicadorPassivoTemp += 0.15f
-                            }
-                            else {
-                                if(multiplicadorAtivoAtual < 45){
-                                    multiplicadorAtivoTemp += 0.15f
-                                }
-                            }
                         }
-                        iconBossImageView.setImageResource(R.drawable.maligno)
                     }
+                    iconBossImageView.setImageResource(R.drawable.maligno)
                 }
-                val layoutParams = iconBossImageView.layoutParams
-                layoutParams.width = originalHeight
-                layoutParams.height = originalHeight
-                iconBossImageView.layoutParams = layoutParams
-                stopBossAnimation()
-                startDeathAnimation()
+            }
+            val layoutParams = iconBossImageView.layoutParams
+            layoutParams.width = originalHeight
+            layoutParams.height = originalHeight
+            iconBossImageView.layoutParams = layoutParams
+            stopBossAnimation()
+            startDeathAnimation()
 
-                multiplicadorAtivo += multiplicadorAtivoTemp
-                multiplicadorPassivo += multiplicadorPassivoTemp
+            multiplicadorAtivo += multiplicadorAtivoTemp
+            multiplicadorPassivo += multiplicadorPassivoTemp
 
-                if(multiplicadorAtivoTemp > 0 && multiplicadorPassivoTemp > 0){
-                    textFalaBoss.text = "+ ${multiplicadorPassivoTemp} multiplicador passivo e ativo"
-                    return
-                }
-                if(multiplicadorPassivoTemp > 0){
-                    textFalaBoss.text = "+ ${multiplicadorPassivoTemp} multiplicador passivo"
-                    return
-                }
-                if(multiplicadorAtivoTemp > 0){
-                    textFalaBoss.text = "+ ${multiplicadorAtivoTemp} multiplicador ativo"
-                    return
-                }
-                textFalaBoss.text = "Não há mais multiplicador para ganhar de mim"
+            when {
+                multiplicadorAtivoTemp > 0 && multiplicadorPassivoTemp > 0 -> textFalaBoss.text = "+ $multiplicadorPassivoTemp multiplicador passivo e ativo"
+                multiplicadorPassivoTemp > 0 -> textFalaBoss.text = "+ $multiplicadorPassivoTemp multiplicador passivo"
+                multiplicadorAtivoTemp > 0 -> textFalaBoss.text = "+ $multiplicadorAtivoTemp multiplicador ativo"
+                else -> textFalaBoss.text = "Não há mais multiplicador para ganhar de mim"
             }
         }
     }

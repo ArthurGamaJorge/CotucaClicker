@@ -26,18 +26,18 @@
 
     <TextView
         android:id="@+id/TextQuantosSucos"
-        android:textColor="@android:color/black"
-        android:layout_width="102dp"
-        android:layout_height="91dp"
+        android:layout_width="370dp"
+        android:layout_height="85dp"
         android:text="@string/strBandecoCount"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.609"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.173" />
+        app:layout_constraintVertical_bias="0.17" />
 
     <TextView
         android:id="@+id/textView7"
@@ -71,18 +71,18 @@
 
     <TextView
         android:id="@+id/TextQuantasAulasExtras"
-        android:textColor="@android:color/black"
-        android:layout_width="102dp"
+        android:layout_width="370dp"
         android:layout_height="101dp"
         android:text="@string/strAulaCount"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintHorizontal_bias="0.609"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.901" />
+        app:layout_constraintVertical_bias="0.9" />
 
     <TextView
         android:id="@+id/textView8"
@@ -146,33 +146,33 @@
 
     <TextView
         android:id="@+id/TextQuantasHorasSono"
-        android:textColor="@android:color/black"
-        android:layout_width="102dp"
+        android:layout_width="370dp"
         android:layout_height="91dp"
         android:text="@string/strSonoCount"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.609"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.41" />
+        app:layout_constraintVertical_bias="0.409" />
 
     <TextView
         android:id="@+id/TextQuantosEsgotos"
-        android:textColor="@android:color/black"
-        android:layout_width="102dp"
+        android:layout_width="370dp"
         android:layout_height="91dp"
         android:text="@string/strEsgotoCount"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintHorizontal_bias="0.634"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.651" />
+        app:layout_constraintVertical_bias="0.65" />
 
     <TextView
         android:id="@+id/textView4"
